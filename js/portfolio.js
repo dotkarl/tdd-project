@@ -9,15 +9,17 @@ class Portfolio {
         this.moneys = this.moneys.concat(moneys);
     }
 
-    evaluate(currency) {
+    evaluate(bank, currency) {
         let failures = [];
         let total = this.moneys.reduce( (sum, money) => {
-            let convertedAmount = this.convert(money, currency);
-            if (convertedAmount === undefined) {
-                failures.push(money.currency + "->" + currency);
-                return sum;
+            try {
+                let convertedMoney = bank.convert(money, currency);
+                return sum + convertedMoney.amount;
             } 
-            return sum + convertedAmount;
+            catch (error) {
+                failures.push(error.message);
+                return sum;
+            }
         }, 0);
         if (!failures.length) {
             return new Money(total, currency);
