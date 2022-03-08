@@ -20,4 +20,3 @@ jobs:
     - name: Test
       run: node js/test_money.js
       shell: bash
-      
